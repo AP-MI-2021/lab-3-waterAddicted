@@ -122,6 +122,33 @@ def get_longest_powers_of_k(lst: list[int], k: int) -> list[int]:
         for i in range(start, finish):
             result_lst.append(lst[i])
     return result_lst
+
+def get_longest_arithmetic_progression(lst: list[int]) -> list[int]:
+    result_list=[]
+    st = -1
+    fin = -1
+    len_max = 0
+    ratie = 0
+    for i in range(0,len(lst)-1):
+        ratie = lst[i+1]-lst[i]
+        j=i+1
+        k=i
+        while(lst[j]-lst[k]) == ratie and j < len(lst)-1:
+            j += 1
+            k += 1
+        if j-i > len_max:
+            len_max = j-i
+            st = i
+            fin = j
+        #2 4 6 3 2 4 6 8 5 2 4 6 8 10
+    for i in range(st,fin):
+        result_list.append(lst[i])
+    #cazul in care ultimul numar indeplineste conditia
+    if fin == len(lst)-1 and lst[fin]-lst[fin - 1] == ratie:
+        result_list.append(lst[fin])
+    return result_list
+
+
 def test_get_longest_all_palindromes():
     '''
     Functia testeaza funtionalitatea functiei
@@ -172,6 +199,29 @@ def test_get_longest_powers_of_k():
     assert (result_lst[8] == 11)
 
 
+def test_get_longest_arithmetic_progression():
+    lst = [1, 2, 3, 4, 5, 67, 23, 44]
+    result_list = get_longest_arithmetic_progression(lst)
+    assert (result_list[0] == 1)
+    assert (result_list[1] == 2)
+    assert (result_list[2] == 3)
+    assert (result_list[3] == 4)
+    assert (result_list[4] == 5)
+    lst =[2, 4, 6, 33, 44, 2, 4, 6, 8, 56, 11, 13, 2, 4, 6, 8, 10, 12]
+    result_list = get_longest_arithmetic_progression(lst)
+    assert (result_list[0] == 2)
+    assert (result_list[1] == 4)
+    assert (result_list[2] == 6)
+    assert (result_list[3] == 8)
+    assert (result_list[4] == 10)
+    assert (result_list[5] == 12)
+    lst = [3, 6, 9, 44, 33, 27, 357, 3, 6, 9, 12, 15]
+    result_list = get_longest_arithmetic_progression(lst)
+    assert (result_list[0] == 3)
+    assert (result_list[1] == 6)
+    assert (result_list[2] == 9)
+    assert (result_list[3] == 12)
+    assert (result_list[4] == 15)
 
 
 def main():
@@ -184,7 +234,8 @@ def main():
         print('1.   Citire date.')
         print('2.   Determinare cea mai lungă subsecvență cu proprietatea ca numerele sunt palindromuri.')
         print('3.   Determinare cea mai lungă subsecvență cu proprietatea ca numerele sunt egale cu un numar oarecare la o putere data.')
-        print('4    Ieșire.')
+        print('4.   Determinare cea mai lungă subsecvență cu proprietatea ca numerele sunt in progresie aritmetica.')
+        print('5.    Ieșire.')
         optiune = input("Alege optiunea:")
         if optiune == '1':
             lst = citire_date()
@@ -203,6 +254,12 @@ def main():
                 print(get_longest_powers_of_k(lst,k))
                 test_get_longest_powers_of_k()
         elif optiune == '4':
+            if lista_goala == False:
+                print('Lista este goala.Selectati optiunea 1 pentru a introduce date.')
+            else:
+                print(get_longest_arithmetic_progression(lst))
+                test_get_longest_arithmetic_progression()
+        elif optiune == '5':
             break
         else:
             print('Optiune invalida.')
